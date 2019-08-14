@@ -112,4 +112,5 @@ if __name__ == '__main__':
         url='https://github.com/Robpol86/' + NAME,
         version=VERSION,
         zip_safe=False,
+        namespace_packages=['sphinxcontrib'],
     )

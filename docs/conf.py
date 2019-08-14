@@ -34,8 +34,8 @@ html_title = project
 
 
 # google analytics
-extensions.append('sphinxcontrib.googleanalytics')
-googleanalytics_id = 'UA-82627369-1'
+# extensions.append('sphinxcontrib.googleanalytics')
+# googleanalytics_id = 'UA-82627369-1'
 
 
 # SCVersioning.

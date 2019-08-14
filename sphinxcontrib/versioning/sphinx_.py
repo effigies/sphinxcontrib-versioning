@@ -1,9 +1,11 @@
 """Interface with Sphinx."""
 
 import datetime
+import importlib
 import logging
 import multiprocessing
 import os
+from pathlib import Path
 import sys
 
 from sphinx import application, locale
@@ -14,13 +16,11 @@ from sphinx.errors import SphinxError
 from sphinx.jinja2glue import SphinxFileSystemLoader
 from sphinx.util.i18n import format_date
 
-from sphinxcontrib.versioning import __version__
 from sphinxcontrib.versioning.lib import Config, HandledError, TempDir
 from sphinxcontrib.versioning.versions import Versions
 
 SC_VERSIONING_VERSIONS = list()  # Updated after forking.
 STATIC_DIR = os.path.join(os.path.dirname(__file__), '_static')
-
 
 class EventHandlers(object):
     """Hold Sphinx event handlers as static or class methods.
@@ -138,32 +138,6 @@ class EventHandlers(object):
                 context['last_updated'] = format_date(lufmt, mtime, language=app.config.language, warn=app.warn)
 
 
-def setup(app):
-    """Called by Sphinx during phase 0 (initialization).
-
-    :param sphinx.application.Sphinx app: Sphinx application object.
-
-    :returns: Extension version.
-    :rtype: dict
-    """
-    # Used internally. For rebuilding all pages when one or versions fail.
-    app.add_config_value('sphinxcontrib_versioning_versions', SC_VERSIONING_VERSIONS, 'html')
-
-    # Needed for banner.
-    app.config.html_static_path.append(STATIC_DIR)
-    app.add_stylesheet('banner.css')
-
-    # Tell Sphinx which config values can be set by the user.
-    for name, default in Config():
-        app.add_config_value('scv_{}'.format(name), default, 'html')
-
-    # Event handlers.
-    app.connect('builder-inited', EventHandlers.builder_inited)
-    app.connect('env-updated', EventHandlers.env_updated)
-    app.connect('html-page-context', EventHandlers.html_page_context)
-    return dict(version=__version__)
-
-
 class ConfigInject(SphinxConfig):
     """Inject this extension info self.extensions. Append after user's extensions."""
 
@@ -182,8 +156,11 @@ def _build(argv, config, versions, current_name, is_root):
     :param str current_name: The ref name of the current version being built.
     :param bool is_root: Is this build in the web root?
     """
-    # Patch.
-    application.Config = ConfigInject
+    log = logging.getLogger(__name__)
+    # Was unable to get this inject to work in python 3.6 sphinx 2+
+    # replaced with importlib jazz before build_main
+    # application.Config = ConfigInject
+
     if config.show_banner:
         EventHandlers.BANNER_GREATEST_TAG = config.banner_greatest_tag
         EventHandlers.BANNER_MAIN_VERSION = config.banner_main_ref
@@ -194,7 +171,6 @@ def _build(argv, config, versions, current_name, is_root):
     EventHandlers.VERSIONS = versions
     SC_VERSIONING_VERSIONS[:] = [p for r in versions.remotes for p in sorted(r.items()) if p[0] not in ('sha', 'date')]
 
-    # Update argv.
     if config.verbose > 1:
         argv += ('-v',) * (config.verbose - 1)
     if config.no_colors:
@@ -202,7 +178,18 @@ def _build(argv, config, versions, current_name, is_root):
     if config.overflow:
         argv += config.overflow
 
-    # Build.
+    # import extensions variable from conf.py from checked out version of code.
+    # if this extension isn't present override extensions in call to sphinx-build
+    # to include it along with any other extension present in conf
+    spec = importlib.util.spec_from_file_location('conf', Path(argv[0], 'conf.py'))
+    _conf = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(_conf)
+    extensions = _conf.extensions
+    if "sphinxcontrib.versioning" not in extensions:
+        extensions.append("sphinxcontrib.versioning")
+        argv += ("-D", f"extensions={','.join(extensions)}")
+
+    # kick of sphinx-build
     result = build_main(argv)
     if result != 0:
         raise SphinxError
