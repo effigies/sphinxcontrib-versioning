@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 import sys
 
-from sphinx import application, locale
+from sphinx import locale
 from sphinx.cmd.build import build_main
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.config import Config as SphinxConfig
@@ -21,6 +21,7 @@ from sphinxcontrib.versioning.versions import Versions
 
 SC_VERSIONING_VERSIONS = list()  # Updated after forking.
 STATIC_DIR = os.path.join(os.path.dirname(__file__), '_static')
+
 
 class EventHandlers(object):
     """Hold Sphinx event handlers as static or class methods.
@@ -60,7 +61,7 @@ class EventHandlers(object):
         if '**' not in app.config.html_sidebars:
             try:
                 app.config.html_sidebars['**'] = StandaloneHTMLBuilder.default_sidebars + ['versions.html']
-            except AttributeError as e:
+            except AttributeError:
                 app.config.html_sidebars['**'] = ['versions.html']
         elif 'versions.html' not in app.config.html_sidebars['**']:
             app.config.html_sidebars['**'].append('versions.html')
@@ -156,11 +157,9 @@ def _build(argv, config, versions, current_name, is_root):
     :param str current_name: The ref name of the current version being built.
     :param bool is_root: Is this build in the web root?
     """
-    log = logging.getLogger(__name__)
     # Was unable to get this inject to work in python 3.6 sphinx 2+
     # replaced with importlib jazz before build_main
     # application.Config = ConfigInject
-
     if config.show_banner:
         EventHandlers.BANNER_GREATEST_TAG = config.banner_greatest_tag
         EventHandlers.BANNER_MAIN_VERSION = config.banner_main_ref
@@ -222,7 +221,7 @@ def build(source, target, versions, current_name, is_root):
     :param bool is_root: Is this build in the web root?
     """
     log = logging.getLogger(__name__)
-    argv = (source, target)
+    argv = (os.path.abspath(source), os.path.abspath(target))
     config = Config.from_context()
 
     log.debug('Running sphinx-build for %s with args: %s', current_name, str(argv))
@@ -250,7 +249,7 @@ def read_config(source, current_name):
     config = Config.from_context()
 
     with TempDir() as temp_dir:
-        argv = (source, temp_dir)
+        argv = (os.path.abspath(source), os.path.abspath(temp_dir))
         log.debug('Running sphinx-build for config values with args: %s', str(argv))
         child = multiprocessing.Process(target=_read_config, args=(argv, config, current_name, queue))
         child.start()
