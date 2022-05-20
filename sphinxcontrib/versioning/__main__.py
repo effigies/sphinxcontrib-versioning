@@ -1,5 +1,6 @@
 """Entry point of project via setuptools which calls cli()."""
 
+import sys
 import logging
 import os
 import shutil
@@ -69,7 +70,7 @@ class ClickGroup(click.Group):
 
         :return: super() return value.
         """
-        argv = kwargs.pop('args', click.get_os_args())
+        argv = kwargs.pop('args', sys.argv[1:])
         if '--' in argv:
             pos = argv.index('--')
             argv, self.overflow = argv[:pos], tuple(argv[pos + 1:])
