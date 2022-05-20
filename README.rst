@@ -7,18 +7,22 @@ Sphinx extension that allows building versioned docs for self-hosting.
 * Python 2.7, 3.3, 3.4, and 3.5 supported on Linux and OS X.
 * Python 2.7, 3.3, 3.4, and 3.5 supported on Windows (both 32 and 64 bit versions of Python).
 
-📖 Full documentation: https://robpol86.github.io/sphinxcontrib-versioning
+📖 Full documentation: https://sphinxcontrib-versioning.readthedocs.io
+
+.. image:: https://readthedocs.org/projects/sphinxcontrib-versioning/badge/?version=latest
+    :target: https://sphinxcontrib-versioning.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 .. image:: https://img.shields.io/appveyor/ci/Robpol86/sphinxcontrib-versioning/master.svg?style=flat-square&label=AppVeyor%20CI
     :target: https://ci.appveyor.com/project/Robpol86/sphinxcontrib-versioning
     :alt: Build Status Windows
 
-.. image:: https://img.shields.io/travis/Robpol86/sphinxcontrib-versioning/master.svg?style=flat-square&label=Travis%20CI
-    :target: https://travis-ci.org/Robpol86/sphinxcontrib-versioning
+.. image:: https://img.shields.io/travis/sphinx-contrib/sphinxcontrib-versioning/master.svg?style=flat-square&label=Travis%20CI
+    :target: https://travis-ci.org/sphinx-contrib/sphinxcontrib-versioning
     :alt: Build Status
 
-.. image:: https://img.shields.io/codecov/c/github/Robpol86/sphinxcontrib-versioning/master.svg?style=flat-square&label=Codecov
-    :target: https://codecov.io/gh/Robpol86/sphinxcontrib-versioning
+.. image:: https://img.shields.io/codecov/c/github/sphinx-contrib/sphinxcontrib-versioning/master.svg?style=flat-square&label=Codecov
+    :target: https://codecov.io/gh/sphinx-contrib/sphinxcontrib-versioning
     :alt: Coverage Status
 
 .. image:: https://img.shields.io/pypi/v/sphinxcontrib-versioning.svg?style=flat-square&label=Latest
@@ -57,8 +61,8 @@ Added
 
 Fixed
     * Unhandled KeyError exception when banner main ref fails pre-build.
-    * https://github.com/Robpol86/sphinxcontrib-versioning/issues/26
-    * https://github.com/Robpol86/sphinxcontrib-versioning/issues/27
+    * https://github.com/sphinx-contrib/sphinxcontrib-versioning/issues/26
+    * https://github.com/sphinx-contrib/sphinxcontrib-versioning/issues/27
 
 2.2.0 - 2016-09-15
 ------------------
@@ -67,14 +71,14 @@ Added
     * Windows support.
 
 Fixed
-    * https://github.com/Robpol86/sphinxcontrib-versioning/issues/17
-    * https://github.com/Robpol86/sphinxcontrib-versioning/issues/3
+    * https://github.com/sphinx-contrib/sphinxcontrib-versioning/issues/17
+    * https://github.com/sphinx-contrib/sphinxcontrib-versioning/issues/3
 
 2.1.4 - 2016-09-03
 ------------------
 
 Fixed
-    * banner.css being overridden by conf.py: https://github.com/Robpol86/sphinxcontrib-versioning/issues/23
+    * banner.css being overridden by conf.py: https://github.com/sphinx-contrib/sphinxcontrib-versioning/issues/23
 
 2.1.3 - 2016-08-24
 ------------------
@@ -111,12 +115,12 @@ Added
 
 Changed
     * Root ref will also be built in its own directory like other versions. All URLs to root ref will point to the one
-      in that directory instead of the root. More info: https://github.com/Robpol86/sphinxcontrib-versioning/issues/15
+      in that directory instead of the root. More info: https://github.com/sphinx-contrib/sphinxcontrib-versioning/issues/15
     * Renamed Jinja2 context variable ``scv_is_root_ref`` to ``scv_is_root``.
 
 Fixed
-    * https://github.com/Robpol86/sphinxcontrib-versioning/issues/13
-    * https://github.com/Robpol86/sphinxcontrib-versioning/pull/20
+    * https://github.com/sphinx-contrib/sphinxcontrib-versioning/issues/13
+    * https://github.com/sphinx-contrib/sphinxcontrib-versioning/pull/20
 
 Removed
     * Jinja2 context variables: ``scv_root_ref_is_branch`` ``scv_root_ref_is_tag``
@@ -143,7 +147,7 @@ Fixed
     * Exposing sphinx-build verbosity to SCVersioning. Specify one ``-v`` to make SCVersioning verbose and two or more
       to make sphinx-build verbose.
     * Using ``--no-colors`` also turns off colors from sphinx-build.
-    * https://github.com/Robpol86/sphinxcontrib-versioning/issues/16
+    * https://github.com/sphinx-contrib/sphinxcontrib-versioning/issues/16
 
 1.1.0 - 2016-08-07
 ------------------
@@ -157,13 +161,13 @@ Changed
     * Version links point to that version of the current page if it exists there.
 
 Fixed
-    * https://github.com/Robpol86/sphinxcontrib-versioning/issues/5
+    * https://github.com/sphinx-contrib/sphinxcontrib-versioning/issues/5
 
 1.0.1 - 2016-08-02
 ------------------
 
 Fixed
-    * easy_install: https://github.com/Robpol86/sphinxcontrib-versioning/issues/4
+    * easy_install: https://github.com/sphinx-contrib/sphinxcontrib-versioning/issues/4
 
 1.0.0 - 2016-07-23
 ------------------

@@ -87,6 +87,7 @@ if __name__ == '__main__':
             'Operating System :: POSIX :: Linux',
             'Operating System :: POSIX',
             'Programming Language :: Python :: 3.6',
+            'Programming Language :: Python :: 3.7',
             'Programming Language :: Python :: Implementation :: PyPy',
             'Topic :: Documentation :: Sphinx',
             'Topic :: Software Development :: Documentation',
